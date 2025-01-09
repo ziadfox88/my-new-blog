@@ -1,0 +1,94 @@
+{% extends "base2.html" %}
+{% load static %}
+
+{% block title %}
+    {{post.title}}
+{% endblock title %}
+    
+
+
+{% block header %}
+        {% if post.bg_image %}
+        <header class="masthead" style="background-image: url('{{post.bg_image.url}}')">
+            <div class="container position-relative px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        <div class="post-heading">
+                            <h1> {{post.title}} </h1>
+                            
+                            <span class="meta">
+                                Posted by
+                                <a href="#!"> {{post.auther.first_name|capfirst|default:post.auther.username}} </a>
+                                {{post.publish}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        {% else %}
+        <header class="masthead" style="background-image: url('{% static "assets/img/post-bg.jpg" %}')">
+            <div class="container position-relative px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        <div class="post-heading">
+                            <h1>Man must explore, and this is exploration at its greatest</h1>
+                            <h2 class="subheading">Problems look mighty small from 150 miles up</h2>
+                            <span class="meta">
+                                Posted by
+                                <a href="#!">Start Bootstrap</a>
+                                on August 24, 2023
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        {% endif %}
+
+{% endblock header %}
+{% block content %}
+        <!-- Post Content-->
+        <article class="mb-4">
+            <div class="container px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        <p> 
+                            {{post.body}}
+                        </p>
+                        {% if post.post_image %}
+                        <a href="#!"><img class="img-fluid" src="{{post.post_image.url}}" alt="..." /></a>
+                        {% else %}
+                        <a href="#!"><img class="img-fluid" src="{% static "assets/img/post-sample-image.jpg" %}" alt="..." /></a>
+                        {% endif %}
+                        
+                        
+                </div>
+            </div>
+        </article>
+        <hr>
+        {% with comments.count as total_comments %}
+        <h2>
+            {{total_comments}} comment {{total_comments|pluralize}}
+        </h2>
+        {% endwith %}
+        {% for comment in comments %}
+            <div>
+                <p>
+                    Comment {{forloop.counter}} by {{comment.name}}
+                    {{comment.created_at}}
+                </p>
+                {{comment.body|linebreaks}}
+            </div>
+            {% empty %}
+            <p>there are no comments</p>
+        {% endfor %}
+
+        
+{% endblock content %}
+
+{% block comment %}
+        {% include "includes/comment_form.html" %}
+{% endblock comment %}
+
+
